@@ -105,14 +105,12 @@ class RNN(BaseModel):
 
     def primed_sample(self, cell):
         initial_state = cell.zero_state(self.num_samples, dtype=tf.float32)
-        primed_state = tfcompat.nn.dynamic_rnn(
-            inputs=self.x_prime,
-            cell=cell,
-            sequence_length=self.x_prime_len,
-            dtype=tf.float32,
+        rnn_layer = tf.keras.layers.RNN(cell, return_state=True)
+        primed_outputs, *primed_state = rnn_layer(
+            self.x_prime,
             initial_state=initial_state,
-            scope='rnn'
-        )[1]
+            mask=tf.sequence_mask(self.x_prime_len)
+        )
         return rnn_free_run(
             cell=cell,
             sequence_length=self.sample_tsteps,
@@ -144,13 +142,11 @@ class RNN(BaseModel):
             bias=self.bias
         )
         self.initial_state = cell.zero_state(tf.shape(self.x)[0], dtype=tf.float32)
-        outputs, self.final_state = tfcompat.nn.dynamic_rnn(
-            inputs=self.x,
-            cell=cell,
-            sequence_length=self.x_len,
-            dtype=tf.float32,
+        rnn_layer = tf.keras.layers.RNN(cell, return_state=True)
+        outputs, *self.final_state = rnn_layer(
+            self.x,
             initial_state=self.initial_state,
-            scope='rnn'
+            mask=tf.sequence_mask(self.x_len)
         )
         params = time_distributed_dense_layer(outputs, self.output_units, scope='rnn/gmm')
         pis, mus, sigmas, rhos, es = self.parse_parameters(params)

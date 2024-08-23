@@ -432,7 +432,7 @@ class BaseModel(object):
 
     def build_graph(self):
         with tf.Graph().as_default() as graph:
-            self.ema = tf.train.ExponentialMovingAverage(decay=0.99)
+            self.ema = tf.compat.v1.train.ExponentialMovingAverage(decay=0.99)
             self.global_step = tf.Variable(0, trainable=False)
             self.learning_rate_var = tf.Variable(0.0, trainable=False)
             self.beta1_decay_var = tf.Variable(0.0, trainable=False)
@@ -440,9 +440,9 @@ class BaseModel(object):
             self.loss = self.calculate_loss()
             self.update_parameters(self.loss)
 
-            self.saver = tfcompat.train.Saver(max_to_keep=1)
+            self.saver = tf.compat.v1.train.Saver(max_to_keep=1)
             if self.enable_parameter_averaging:
-                self.saver_averaged = tfcompat.train.Saver(self.ema.variables_to_restore(), max_to_keep=1)
+                self.saver_averaged = tf.compat.v1.train.Saver(self.ema.variables_to_restore(), max_to_keep=1)
 
-            self.init = tfcompat.global_variables_initializer()
+            self.init = tf.compat.v1.global_variables_initializer()
             return graph

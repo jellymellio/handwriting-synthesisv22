@@ -214,7 +214,7 @@ def rnn_teacher_force(inputs, cell, sequence_length, initial_state, scope='dynam
 
 def rnn_free_run(cell, initial_state, sequence_length, initial_input=None, scope='dynamic-rnn-free-run'):
     """
-    Implementation of an rnn which feeds its feeds its predictions back to itself at the next timestep.
+    Implementation of an rnn which feeds its predictions back to itself at the next timestep.
 
     cell must implement two methods:
 
