@@ -3,7 +3,7 @@ from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import ops
 from tensorflow.python.framework import tensor_shape
 from tensorflow.python.ops import array_ops
-from tensorflow.python.ops import control_flow_ops
+from tensorflow.compat.v1 import control_flow_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
@@ -103,7 +103,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
         state_ta = nest.pack_sequence_as(structure=state, flat_sequence=flat_state_ta)
 
         def condition(unused_time, elements_finished, *_):
-            return math_ops.logical_not(math_ops.reduce_all(elements_finished))
+            return math_ops.logical_not(math_ops.reduce_all(elements_finished, axis=None, keepdims=False, name=None))
 
         def body(time, elements_finished, current_input, state_ta, emit_ta, state, loop_state):
             (next_output, cell_state) = cell(current_input, state)
@@ -180,7 +180,7 @@ def rnn_teacher_force(inputs, cell, sequence_length, initial_state, scope='dynam
         next_cell_state = initial_state if cell_output is None else cell_state
 
         elements_finished = time >= sequence_length
-        finished = math_ops.reduce_all(elements_finished)
+        finished = math_ops.reduce_all(elements_finished, axis=None, keepdims=False, name=None)
 
         next_input = control_flow_ops.cond(
             finished,
@@ -218,7 +218,7 @@ def rnn_free_run(cell, initial_state, sequence_length, initial_input=None, scope
             time >= sequence_length,
             cell.termination_condition(next_cell_state)
         )
-        finished = math_ops.reduce_all(elements_finished)
+        finished = math_ops.reduce_all(elements_finished, axis=None, keepdims=False, name=None)
 
         next_input = control_flow_ops.cond(
             finished,
