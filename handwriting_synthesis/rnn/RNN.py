@@ -2,15 +2,12 @@ from __future__ import print_function
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.compat.v1 as tfcompat
 
 from handwriting_synthesis import drawing
 from handwriting_synthesis.rnn import LSTMAttentionCell
 from handwriting_synthesis.rnn.operations import rnn_free_run
 from handwriting_synthesis.tf import BaseModel
 from handwriting_synthesis.tf.utils import time_distributed_dense_layer
-
-tfcompat.disable_v2_behavior()
 
 
 class RNN(BaseModel):
@@ -75,14 +72,11 @@ class RNN(BaseModel):
         gmm_likelihood = tf.reduce_sum(pis * gaussian_likelihoods, 2)
         gmm_likelihood = tf.clip_by_value(gmm_likelihood, eps, np.inf)
 
-        bernoulli_likelihood = tf.squeeze(tfcompat.where(tf.equal(tf.ones_like(y_3), y_3), es, 1 - es))
+        bernoulli_likelihood = tf.squeeze(tf.where(tf.equal(tf.ones_like(y_3), y_3), es, 1 - es))
 
         nll = -(tf.math.log(gmm_likelihood) + tf.math.log(bernoulli_likelihood))
-        sequence_mask = tf.logical_and(
-            tf.sequence_mask(lengths, maxlen=tf.shape(y)[1]),
-            tf.logical_not(tf.math.is_nan(nll)),
-        )
-        nll = tfcompat.where(sequence_mask, nll, tf.zeros_like(nll))
+        sequence_mask = tf.sequence_mask(lengths, maxlen=tf.shape(y)[1])
+        nll = tf.where(sequence_mask, nll, tf.zeros_like(nll))
         num_valid = tf.reduce_sum(tf.cast(sequence_mask, tf.float32), axis=1)
 
         sequence_loss = tf.reduce_sum(nll, axis=1) / tf.maximum(num_valid, 1.0)
@@ -119,19 +113,18 @@ class RNN(BaseModel):
         )[1]
 
     def calculate_loss(self):
-        self.x = tfcompat.placeholder(tf.float32, [None, None, 3])
-        self.y = tfcompat.placeholder(tf.float32, [None, None, 3])
-        self.x_len = tfcompat.placeholder(tf.int32, [None])
-        self.c = tfcompat.placeholder(tf.int32, [None, None])
-        self.c_len = tfcompat.placeholder(tf.int32, [None])
+        self.x = tf.keras.Input(shape=(None, 3), dtype=tf.float32)
+        self.y = tf.keras.Input(shape=(None, 3), dtype=tf.float32)
+        self.x_len = tf.keras.Input(shape=(), dtype=tf.int32)
+        self.c = tf.keras.Input(shape=(None,), dtype=tf.int32)
+        self.c_len = tf.keras.Input(shape=(), dtype=tf.int32)
 
-        self.sample_tsteps = tfcompat.placeholder(tf.int32, [])
-        self.num_samples = tfcompat.placeholder(tf.int32, [])
-        self.prime = tfcompat.placeholder(tf.bool, [])
-        self.x_prime = tfcompat.placeholder(tf.float32, [None, None, 3])
-        self.x_prime_len = tfcompat.placeholder(tf.int32, [None])
-        self.bias = tfcompat.placeholder_with_default(
-            tf.zeros([self.num_samples], dtype=tf.float32), [None])
+        self.sample_tsteps = tf.keras.Input(shape=(), dtype=tf.int32)
+        self.num_samples = tf.keras.Input(shape=(), dtype=tf.int32)
+        self.prime = tf.keras.Input(shape=(), dtype=tf.bool)
+        self.x_prime = tf.keras.Input(shape=(None, 3), dtype=tf.float32)
+        self.x_prime_len = tf.keras.Input(shape=(), dtype=tf.int32)
+        self.bias = tf.keras.Input(shape=(None,), dtype=tf.float32, default=tf.zeros([self.num_samples], dtype=tf.float32))
 
         cell = LSTMAttentionCell(
             lstm_size=self.lstm_size,

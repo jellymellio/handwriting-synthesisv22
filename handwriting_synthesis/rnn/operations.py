@@ -7,9 +7,6 @@ from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
-from tensorflow.python.ops.rnn import _maybe_tensor_shape_from_tensor
-from tensorflow.python.ops.rnn_cell_impl import _concat, assert_like_rnncell
-from tensorflow.python.util import is_in_graph_mode
 from tensorflow.python.util import nest
 
 
@@ -26,28 +23,18 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
         final cell state,
     )
     """
-    assert_like_rnncell("Raw rnn cell", cell)
-
     if not callable(loop_fn):
         raise TypeError("loop_fn must be a callable")
 
     parallel_iterations = parallel_iterations or 32
 
-    # Create a new scope in which the caching device is either
-    # determined by the parent scope, or is set to place the cached
-    # Variable using the same placement as for the rest of the RNN.
     with vs.variable_scope(scope or "rnn") as varscope:
-        if is_in_graph_mode.IS_IN_GRAPH_MODE():
-            if varscope.caching_device is None:
-                varscope.set_caching_device(lambda op: op.device)
-
         time = constant_op.constant(0, dtype=dtypes.int32)
         (elements_finished, next_input,
          initial_state, emit_structure, init_loop_state) = loop_fn(
             time, None, None, None)  # time, cell_output, cell_state, loop_state
         flat_input = nest.flatten(next_input)
 
-        # Need a surrogate loop state for the while_loop if none is available.
         loop_state = (
             init_loop_state if init_loop_state is not None else
             constant_op.constant(0, dtype=dtypes.int32))
@@ -56,7 +43,6 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
         static_batch_size = tensor_shape.dimension_at_index(input_shape[0], 0)
 
         for input_shape_i in input_shape:
-            # Static verification that batch sizes all match
             static_batch_size.assert_is_compatible_with(
                 tensor_shape.dimension_at_index(input_shape_i, 0))
 
@@ -133,19 +119,16 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
             nest.assert_same_structure(current_input, next_input)
             nest.assert_same_structure(emit_ta, emit_output)
 
-            # If loop_fn returns None for next_loop_state, just reuse the previous one.
             loop_state = loop_state if next_loop_state is None else next_loop_state
 
             def _copy_some_through(current, candidate):
                 """Copy some tensors through via array_ops.where."""
 
                 def copy_fn(cur_i, cand_i):
-                    # TensorArray and scalar get passed through.
                     if isinstance(cur_i, tensor_array_ops.TensorArray):
                         return cand_i
                     if cur_i.shape.ndims == 0:
                         return cand_i
-                    # Otherwise propagate the old or the new value.
                     with ops.colocate_with(cand_i):
                         return array_ops.where(elements_finished, cur_i, cand_i)
 

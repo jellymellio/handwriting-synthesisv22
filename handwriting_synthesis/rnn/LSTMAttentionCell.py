@@ -2,7 +2,6 @@ from collections import namedtuple
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.compat.v1.distributions as tfd
 import tensorflow_probability as tfp
 
 from handwriting_synthesis.tf.utils import dense_layer, shape
@@ -22,7 +21,6 @@ class LSTMAttentionCell(tf.keras.layers.Layer):
             attention_values_lengths,
             num_output_mixture_components,
             bias,
-            reuse=None,
     ):
         super(LSTMAttentionCell, self).__init__()
         self.lstm_size = lstm_size
@@ -136,8 +134,8 @@ class LSTMAttentionCell(tf.keras.layers.Layer):
         covar_matrix = tf.reshape(covar_matrix, (self.batch_size, self.num_output_mixture_components, 2, 2))
 
         mvn = tfp.distributions.MultivariateNormalFullCovariance(loc=mus, covariance_matrix=covar_matrix)
-        b = tfd.Bernoulli(probs=es)
-        c = tfd.Categorical(probs=pis)
+        b = tfp.distributions.Bernoulli(probs=es)
+        c = tfp.distributions.Categorical(probs=pis)
 
         sampled_e = b.sample()
         sampled_coords = mvn.sample()
@@ -153,7 +151,7 @@ class LSTMAttentionCell(tf.keras.layers.Layer):
         past_final_char = char_idx >= self.attention_values_lengths
         output = self.output_function(state)
         es = tf.cast(output[:, 2], tf.int32)
-        is_eos = tf.equal(es, tf.experimental.numpy.ones_like(es))
+        is_eos = tf.equal(es, tf.ones_like(es))
         return tf.logical_or(tf.logical_and(final_char, is_eos), past_final_char)
 
     def _parse_parameters(self, gmm_params, eps=1e-8, sigma_eps=1e-4):
