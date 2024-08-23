@@ -1,14 +1,11 @@
-from tensorflow.python.framework import constant_op
-from tensorflow.python.framework import dtypes
-from tensorflow.python.framework import ops
-from tensorflow.python.framework import tensor_shape
-from tensorflow.python.ops import array_ops
-from tensorflow.compat.v1 import while_loop, cond
-from tensorflow.python.ops import math_ops
-from tensorflow.python.ops import tensor_array_ops
+import tensorflow as tf
+from tensorflow.python.framework import constant_op, dtypes, ops, tensor_shape
+from tensorflow.python.ops import array_ops, math_ops, tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
 from tensorflow.python.util import nest
 
+# Replace deprecated imports
+from tensorflow.compat.v1 import while_loop, cond
 
 def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=None):
     """
@@ -232,3 +229,14 @@ def rnn_free_run(cell, initial_state, sequence_length, initial_input=None, scope
 
     states, outputs, final_state = raw_rnn(cell, loop_fn, scope=scope)
     return states, outputs, final_state
+
+# Helper function (if not defined elsewhere)
+def _concat(batch_size, size):
+    return array_ops.concat((array_ops.reshape(batch_size, [1]), size), 0)
+
+# Helper function (if not defined elsewhere)
+def _maybe_tensor_shape_from_tensor(shape):
+    if isinstance(shape, ops.Tensor):
+        return tensor_shape.as_shape(tensor_shape.dimension_value(shape))
+    else:
+        return tensor_shape.TensorShape(shape)
