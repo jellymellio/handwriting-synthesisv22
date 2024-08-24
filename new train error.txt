@@ -1,69 +1,38 @@
 
- *  History restored 
-
-Python 3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 
-64 bit (AMD64)] on win32
+Python 3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 64 bit (AMD64)] on win32
 Type "help", "copyright", "credits" or "license" for more information.
->>> from handwriting_synthesis.training.preparation import prepare
-2024-08-23 20:08:41.167852: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2024-08-23 20:08:46.189579: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+>>> from handwriting_synthesis.training import train
+2024-08-24 09:02:47.285273: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-08-24 09:03:09.589550: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
 WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
 
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow_probability\python\internal\backend\numpy\_utils.py:48: The name tf.logging.TaskLevelStatusMessage is deprecated. Please use tf.compat.v1.logging.TaskLevelStatusMessage instead.      
+WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow_probability\python\internal\backend\numpy\_utils.py:48: The name tf.logging.TaskLevelStatusMessage is deprecated. Please use tf.compat.v1.logging.TaskLevelStatusMessage instead.
 
 WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow_probability\python\internal\backend\numpy\_utils.py:48: The name tf.control_flow_v2_enabled is deprecated. Please use tf.compat.v1.control_flow_v2_enabled instead.
 
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow\python\compat\v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and will be removed in a future version.
+WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow\python\compat\v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and 
+will be removed in a future version.
 Instructions for updating:
 non-resource variables are not supported in the long term
+>>> train()
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\__init__.py", line 3, in <module>
-    from .hand import Hand
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\hand\__init__.py", line 1, in <module>
-    from .Hand import Hand
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\hand\Hand.py", line 9, in <module>
-    from handwriting_synthesis.rnn import RNN
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\rnn\__init__.py", line 2, in <module>
-    from .RNN import RNN
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\rnn\RNN.py", line 8, in <module>
-    from handwriting_synthesis.rnn.operations import rnn_free_run
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\rnn\operations.py", line 6, in <module>
-    from tensorflow.compat.v1 import control_flow_ops
-ImportError: cannot import name 'control_flow_ops' from 'tensorflow.compat.v1' (C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow\_api\v2\compat\v1\__init__.py)
->>>
- *  History restored 
-
-Python 3.12.5 (tags/v3.12.5:ff3bc82, Aug  6 2024, 20:45:27) [MSC v.1940 
-64 bit (AMD64)] on win32
-Type "help", "copyright", "credits" or "license" for more information.
->>> from handwriting_synthesis.training.preparation import prepare
-2024-08-23 20:13:02.182879: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2024-08-23 20:13:07.273705: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
-
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow_probability\python\internal\backend\numpy\_utils.py:48: The name tf.logging.TaskLevelStatusMessage is deprecated. Please use tf.compat.v1.logging.TaskLevelStatusMessage instead.      
-
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow_probability\python\internal\backend\numpy\_utils.py:48: The name tf.control_flow_v2_enabled is deprecated. Please use tf.compat.v1.control_flow_v2_enabled instead.
-
-WARNING:tensorflow:From C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\tensorflow\python\compat\v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and will be removed in a future version.
-Instructions for updating:
-non-resource variables are not supported in the long term
->>> prepare()                                                     
-traversing data directory...
-dumping to numpy arrays...
-C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\training\preparation\prepare.py:22: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
-  valid_mask = np.zeros([len(stroke_fnames)], dtype=np.bool)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\training\preparation\prepare.py", line 22, in prepare 
-    valid_mask = np.zeros([len(stroke_fnames)], dtype=np.bool)
-                                                      ^^^^^^^
-  File "C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\numpy\__init__.py", line 338, in __getattr__
-    raise AttributeError(__former_attrs__[attr])
-AttributeError: module 'numpy' has no attribute 'bool'.
-`np.bool` was a deprecated alias for the builtin `bool`. To avoid this error in existing code, use `bool` by itself. Doing this will not modify 
-any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
-The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
-    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations. Did you mean: 'bool_'?
+  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\training\train.py", line 7, in train
+    dr = DataReader(data_dir=processed_data_path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\training\DataReader.py", line 20, in __init__
+    self.train_df, self.val_df = self.test_df.train_test_split(train_size=0.95, random_state=2018)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ingeborg\Documents\GitHub\handwriting-synthesisv22\handwriting_synthesis\data_frame\DataFrame.py", line 42, in train_test_split
+    train_idx, test_idx = train_test_split(
+                          ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\sklearn\utils\_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\sklearn\model_selection\_split.py", line 2780, in train_test_split
+    n_train, n_test = _validate_shuffle_split(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ingeborg\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\sklearn\model_selection\_split.py", line 2410, in _validate_shuffle_split        
+    raise ValueError(
+ValueError: With n_samples=0, test_size=None and train_size=0.95, the resulting train set will be empty. Adjust any of the aforementioned parameters.     
 >>>
